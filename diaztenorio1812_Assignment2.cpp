@@ -1,4 +1,7 @@
 //Assignment 2 Daniela Diaz
+//now the binary tree can be created
+//we are mising the traverse part to print the tree in order
+//I will create a different branch to work on the print part
 //#include "stdafx.h"
 #include <stdio.h>
 #include <stdlib.h>
