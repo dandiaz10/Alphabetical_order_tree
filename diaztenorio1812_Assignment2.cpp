@@ -120,6 +120,7 @@ void addToBinaryTree(const char newString[]) {
 		newNode->left = NULL;
 		newNode->right = NULL;
 		newNode->up = NULL;
+		newNode->rFlag = 2; //only header has 2 in rFlag
 	}
 	
 }
