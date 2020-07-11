@@ -7,6 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define LEFT_CHILD_NODE 0
+#define RIGHT_CHILD_NODE 1
+#define PARENT_NODE 2
+
 struct nodeData *head = NULL;	// head of the binary tree
 
 // structure defining a binary tree node.  Lower sorted values will go the the left, higher to the right.
@@ -92,7 +96,7 @@ void addToBinaryTree(const char newString[]) {
 				printf("added to right.................\n");
 				currentNode->right = newNode;
 				newNode->up = currentNode;
-				newNode->rFlag = 1;
+				newNode->rFlag = RIGHT_CHILD_NODE;
 				currentNode = NULL;
 			}
 
@@ -104,10 +108,9 @@ void addToBinaryTree(const char newString[]) {
 			}
 			else
 			{
-				printf("added to left.................\n");
 				currentNode->left = newNode;
 				newNode->up = currentNode;
-				newNode->rFlag = 0;
+				newNode->rFlag = LEFT_CHILD_NODE;
 				currentNode = NULL;
 			}
 			
@@ -120,7 +123,7 @@ void addToBinaryTree(const char newString[]) {
 		newNode->left = NULL;
 		newNode->right = NULL;
 		newNode->up = NULL;
-		newNode->rFlag = 2; //only header has 2 in rFlag
+		newNode->rFlag = PARENT_NODE; //only header has 2 in rFlag
 	}
 	
 }
@@ -128,8 +131,7 @@ void addToBinaryTree(const char newString[]) {
 // FUNCTION      : printBinaryTree
 //
 // DESCRIPTION   :
-//   This function will print the entire binary tree out.  You can choose to print
-//   it using recursion but more marks will be awarded if you do it non recursively.
+//   This function prints the entire binary tree out traversing the binary tree in-order without using recursion.
 //
 // PARAMETERS    :
 //   None
@@ -137,16 +139,14 @@ void addToBinaryTree(const char newString[]) {
 // RETURNS       :
 //   Nothing
 void printBinaryTree(void) {
-	// add code to print data in order starting at the "head" pointer
 	nodeData *currentNode = head;
 
-	printf("Binary tree traversed in-order\n");
+	printf("\nBinary tree traversed in-order...\n");
 	if(head != NULL)
 	{
-		while (1)
+		while (1) //loop that checks if there is a left node
 		{
-	
-			if (currentNode->left != NULL)
+			if (currentNode->left != NULL) // move to the left node
 			{
 				currentNode = currentNode->left;
 			}
@@ -154,28 +154,28 @@ void printBinaryTree(void) {
 			{
 				printf("%s\n", currentNode->name);
 
-				while (1)
+				while (1) //loop that checks if there is a right node
 				{
 					if (currentNode->right != NULL)
 					{
 						currentNode = currentNode->right;
-						break; // go to check left "loop"
-					}// up to here the loop is okay
-					else
+						break; // break the current while loop and go to check left node "loop" - GO TO line146
+					}
+					else //there is no right node
 					{
-						while (currentNode->rFlag == 1)
+						while (currentNode->rFlag == RIGHT_CHILD_NODE) // if current node is the right child node of its parent node
 						{
 							currentNode = currentNode->up;
 						}
-						if(currentNode->rFlag == 0)
+						if(currentNode->rFlag == LEFT_CHILD_NODE) // if current node is the left child node of its parent node
 						{
 							currentNode = currentNode->up;
 							printf("%s\n", currentNode->name);
 						}
-						else
+						else //if current node is the head of the tree
 						{
 							printf("End of the tree....\n");
-							return;
+							return; //finish the function
 						}
 					}
 				}
