@@ -15,6 +15,7 @@ struct nodeData {
 	struct nodeData *left = NULL;		// pointer to the next node in the tree that is less than current node OR NULL if empty
 	struct nodeData *right = NULL;		// pointer to the next node in the tree that is greater than current node OR NULL if empty
 	struct nodeData *up = NULL; //pointer to the higher level node to not use recursion
+	int rFlag;
 };
 
 // inputData obtained from Prog8130AssignDataCreator.exe with student code 1812
@@ -91,6 +92,7 @@ void addToBinaryTree(const char newString[]) {
 				printf("added to right.................\n");
 				currentNode->right = newNode;
 				newNode->up = currentNode;
+				newNode->rFlag = 1;
 				currentNode = NULL;
 			}
 
@@ -105,6 +107,7 @@ void addToBinaryTree(const char newString[]) {
 				printf("added to left.................\n");
 				currentNode->left = newNode;
 				newNode->up = currentNode;
+				newNode->rFlag = 0;
 				currentNode = NULL;
 			}
 			
