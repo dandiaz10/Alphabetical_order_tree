@@ -18,6 +18,7 @@
 #define PARENT_NODE 2
 
 #define STRING_SIZE 30
+#define INPUT_SIZE 12
 
 struct nodeData *head = NULL;	// head of the binary tree 
 
@@ -199,11 +200,10 @@ void printBinaryTree(void) {
 
 int main() {
 	
-
 	int i;
 
 	// put all the data into the binary tree
-	for (i = 0; i < 12; i++)
+	for (i = 0; i < INPUT_SIZE; i++)
 		addToBinaryTree(inputData[i]);
 
 	// print the entire tree.  It should come out in alphabetical order because of the way it was stored in the tree
