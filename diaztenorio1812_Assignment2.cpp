@@ -1,29 +1,37 @@
-//Assignment 2 Daniela Diaz
-//now the binary tree can be created
-//we are mising the traverse part to print the tree in order
-//I will create a different branch to work on the print part
-//#include "stdafx.h"
+/*******************************************************************************************
+* File Name          : diaztenorio1812_Assignment2.cpp
+* Description        : Prog8130 - Assignment 2: Binary tree
+*					   This program uses a binary tree to hold and print strings in alphabetic order.
+*					   Each input consists of maximum 30 characters.
+*
+* Author:              Daniela Diaz Tenorio
+* Date:					July 11 2020
+********************************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+//Macros to know which child node (right, left or parent) is the node
 #define LEFT_CHILD_NODE 0
 #define RIGHT_CHILD_NODE 1
 #define PARENT_NODE 2
 
-struct nodeData *head = NULL;	// head of the binary tree
+#define STRING_SIZE 30
+
+struct nodeData *head = NULL;	// head of the binary tree 
 
 // structure defining a binary tree node.  Lower sorted values will go the the left, higher to the right.
 struct nodeData {
-	char name[30];				// character string of the data being stored in the node
+	char name[STRING_SIZE];				// character string of the data being stored in the node
 	struct nodeData *left = NULL;		// pointer to the next node in the tree that is less than current node OR NULL if empty
 	struct nodeData *right = NULL;		// pointer to the next node in the tree that is greater than current node OR NULL if empty
-	struct nodeData *up = NULL; //pointer to the higher level node to not use recursion
+	struct nodeData *up = NULL; //pointer to the parent node to not use recursion
 	int rFlag;
 };
 
 // inputData obtained from Prog8130AssignDataCreator.exe with student code 1812
-const char inputData[][30] = {
+const char inputData[][STRING_SIZE] = {
 		{ "eomsq"},
 		{ "mjcjx"},
 		{ "yhgyu"},
@@ -38,7 +46,7 @@ const char inputData[][30] = {
 		{ "gacli"}
 };
 
-// The correct sorted order using a binary tree is:
+// The correct sorted order should be:
 //      aujtx
 //      bngua
 //      bonyd
@@ -56,7 +64,9 @@ const char inputData[][30] = {
 // FUNCTION      : addToBinaryTree
 //
 // DESCRIPTION   :
-//   This function will store the data in newNode into a binary tree according to alphabetical order
+//   This function stores the data in newNode into a binary tree according to alphabetical order
+//		Right node greater value
+//		Left node lower value
 //
 // PARAMETERS    :
 //   newString - the string that is to be stored in the binary tree in alphabetica order
@@ -64,28 +74,20 @@ const char inputData[][30] = {
 // RETURNS       :
 //   Nothing
 void addToBinaryTree(const char newString[]) {
-	// add code to put items into binary tree in alphabetical order here
-	// consider using strcmp library function to decide if a name is greater or less than
-	printf("\nHead is %s \n", head->name);
-	nodeData *currentNode = NULL;
+	
+	nodeData *currentNode = head;
 	nodeData *newNode = NULL;
 	int compare = 0;
 
-	currentNode = head;
-	newNode = (nodeData*)malloc(sizeof(nodeData));
-	strcpy_s(newNode->name, newString);    //assing the string value to the structure element
+	newNode = (nodeData*)malloc(sizeof(nodeData)); //asign memory for the new node in the heap
+	strcpy_s(newNode->name, newString);    //assing the string value to the structure element name
 	newNode->left = NULL;
 	newNode->right = NULL;
 	newNode->up = NULL;
 	
-	printf("newstring is %s \n", newNode->name);
-	
-
-	while (currentNode != NULL)
+	while (currentNode != NULL) // if there is a value in current node
 	{
-		printf("current string is %s \n", currentNode->name);
-		printf("upper node is %s \n", currentNode->up);
-		compare = strcmp(newNode->name, currentNode->name);
+		compare = strcmp(newNode->name, currentNode->name); //compare strings
 		
 		if (compare >= 0) { //newNode is grater or equal than current
 			if (currentNode->right != NULL) {
@@ -93,7 +95,6 @@ void addToBinaryTree(const char newString[]) {
 			}
 			else //newNode is less than current
 			{
-				printf("added to right.................\n");
 				currentNode->right = newNode;
 				newNode->up = currentNode;
 				newNode->rFlag = RIGHT_CHILD_NODE;
@@ -101,29 +102,29 @@ void addToBinaryTree(const char newString[]) {
 			}
 
 		}
-		else
+		else //new node is less than current
 		{
-			if (currentNode->left != NULL) {
+			if (currentNode->left != NULL) { //if there is a left child node
 				currentNode = currentNode->left;
 			}
-			else
+			else // if there is no left child node
 			{
 				currentNode->left = newNode;
-				newNode->up = currentNode;
-				newNode->rFlag = LEFT_CHILD_NODE;
+				newNode->up = currentNode; //save its parent address
+				newNode->rFlag = LEFT_CHILD_NODE; //save which child node is from its parent
 				currentNode = NULL;
 			}
 			
 		}
 	}
 	
-	if (head->name == NULL) 
+	if (head->name == NULL) // if head is empty assigns new node as head
 	{
 		head = newNode; // head points to the first element
 		newNode->left = NULL;
 		newNode->right = NULL;
 		newNode->up = NULL;
-		newNode->rFlag = PARENT_NODE; //only header has 2 in rFlag
+		newNode->rFlag = PARENT_NODE; // this node doesn't have parent node
 	}
 	
 }
@@ -142,11 +143,10 @@ void printBinaryTree(void) {
 	nodeData *currentNode = head;
 
 	printf("\nBinary tree traversed in-order...\n");
-	if(head != NULL)
-	{
-		while (1) //loop that checks if there is a left node
+	
+		while (currentNode != NULL) //loop that checks if there is something in current node
 		{
-			if (currentNode->left != NULL) // move to the left node
+			if (currentNode->left != NULL) // check if there is a child left node
 			{
 				currentNode = currentNode->left;
 			}
@@ -182,10 +182,20 @@ void printBinaryTree(void) {
 			}
 			
 		}
-	}
 }
 
 
+// FUNCTION      : main
+//
+// DESCRIPTION   :
+//   Pull the data into the binary tree calling addToBinaryTree function
+//	 Prints data in alphabetic order calling printBinaryTree
+//
+// PARAMETERS    :
+//   None
+//
+// RETURNS       : 
+//   Int 0
 
 int main() {
 	
