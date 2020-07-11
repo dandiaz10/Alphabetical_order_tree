@@ -138,9 +138,51 @@ void addToBinaryTree(const char newString[]) {
 //   Nothing
 void printBinaryTree(void) {
 	// add code to print data in order starting at the "head" pointer
+	nodeData *currentNode = head;
 
+	printf("Binary tree traversed in-order\n");
+	if(head != NULL)
+	{
+		while (1)
+		{
+	
+			if (currentNode->left != NULL)
+			{
+				currentNode = currentNode->left;
+			}
+			else //if left node is NULL
+			{
+				printf("%s\n", currentNode->name);
 
-
+				while (1)
+				{
+					if (currentNode->right != NULL)
+					{
+						currentNode = currentNode->right;
+						break; // go to check left "loop"
+					}// up to here the loop is okay
+					else
+					{
+						while (currentNode->rFlag == 1)
+						{
+							currentNode = currentNode->up;
+						}
+						if(currentNode->rFlag == 0)
+						{
+							currentNode = currentNode->up;
+							printf("%s\n", currentNode->name);
+						}
+						else
+						{
+							printf("End of the tree....\n");
+							return;
+						}
+					}
+				}
+			}
+			
+		}
+	}
 }
 
 
